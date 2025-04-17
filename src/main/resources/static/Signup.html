@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup - CRM System</title>
+</head>
+<body>
+<h2>Signup Form</h2>
+
+<form action="/signup" method="post">
+    <label for="name">Full Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="email">Email ID:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <label for="roleid">Select Role ID:</label><br>
+    <select id="roleid" name="roleid">
+        <option value="1">1 - Admin</option>
+        <option value="2">2 - Manager</option>
+        <option value="3">3 - Sales</option>
+    </select><br><br>
+
+    <button type="submit">Register</button>
+</form>
+</body>
+</html>
