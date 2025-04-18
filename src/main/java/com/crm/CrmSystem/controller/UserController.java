@@ -6,7 +6,11 @@ import com.crm.CrmSystem.services.RoleService;
 import com.crm.CrmSystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -20,22 +24,10 @@ public class UserController {
     RoleService roleService;
 
 
-//   @PostMapping("/signup")
-//   public String signup(
-//           @RequestParam String email,
-//           @RequestParam String password,
-//           @RequestParam String name,
-//           @RequestParam long roleid) {
-//       Role role = roleService.getById(roleid);
-//       User user = new User(email, password, name, role);
-//       userService.addUser(user);
-//       return "Signup Done";
-//   }
-
-   @PostMapping("/newUser")
-    public String SignUp(@RequestBody User user){
-       userService.addUser(user);
-       return "User Register Successfully!";
+   @PostMapping("/Signup")
+    public User SignUp(@RequestBody User user){
+       System.out.println(user.getEmailId()+user.getRole()+user.getAuthorities());
+      return userService.addUser(user);
 //       "userName":"pojo",
 //               "password":"1234",
 //               "emailId":"pojo@gmail.com",
@@ -43,18 +35,14 @@ public class UserController {
 //           "roleId":1
 //       }
     }
-//
-//    @GetMapping("/userid")
-//    public String getUser(@RequestParam long id) {
-//        User user = userService.findUser(id);
-//        return user.getUsername() + user.getEmailId() + user.getRole().getRoleName();
-//    }
 
-//    @PostMapping("/login")
-//    public String login(@RequestParam  String username ,@RequestParam String password){
-//        System.out.println(username+ " "+ password);
-//       return userService.login(username,password).getUsername();
-//    }
+    public ResponseEntity<Map<String,Object>> signUp(@RequestBody User user){
+        User savedUser = userService.addUser(user);
+        Map<String,Object> respone = new HashMap<>();
+        respone.put("mesg","Signup sucess");
+        return ResponseEntity.ok(respone);
+    }
+
 
     @PostMapping("/Login")
     public User loginU(@RequestBody User user){
