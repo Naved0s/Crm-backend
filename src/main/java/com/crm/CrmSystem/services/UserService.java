@@ -15,16 +15,18 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
+    //Register User
     public User addUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
+    //Find User
     public User findUser(long id){
         return userRepository.findById(id).orElseThrow();
     }
 
+    //Login
     public User login(String email , String password){
             User u = userRepository.findByEmailId(email).orElseThrow();
             String pass = u.getPassword();
@@ -36,4 +38,21 @@ public class UserService {
                 return null;
             }
     }
+
+
+
+
+
+    /************************** Login with Username ****************/
+//    public User loginName(String username , String password){
+//        User u = userRepository.findByUserName(username).orElseThrow();
+//        String pass = u.getPassword();
+//        System.out.println(username+password);
+//        if(passwordEncoder.matches(password,pass)){
+//            return u;
+//        }
+//        else{
+//            return null;
+//        }
+//    }
 }

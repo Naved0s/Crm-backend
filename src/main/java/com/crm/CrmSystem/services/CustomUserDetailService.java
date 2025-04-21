@@ -12,14 +12,12 @@ public class CustomUserDetailService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return ;
+        return userRepository.findByUserName(username).orElseThrow();
     }
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return userRepository.findByUserName(username).orElseThrow();
-//    }
 
 
 }
