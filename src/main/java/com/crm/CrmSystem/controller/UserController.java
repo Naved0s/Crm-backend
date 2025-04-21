@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,17 +27,9 @@ public class UserController {
 
     //SIGNUP MAPPING
     @PostMapping("/Signup")
-    public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
-        System.out.println(user.getEmailId() + user.getRole() + user.getAuthorities());
-
+    public User signUp(@RequestBody User user){
         User savedUser = userService.addUser(user);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Signup successful");
-        response.put("userId", savedUser.getUserId()); // optional
-        response.put("userName", savedUser.getUsername());
-
-        return ResponseEntity.ok(response);
+        return savedUser;
     }
 
     //LOGIN MAPPING
@@ -48,10 +41,25 @@ public class UserController {
 
 
 
+
     /********* login with userName *************/
 //    @PostMapping("/LoginU")
 //    public User loginName(@RequestBody User user){
 //    return userService.loginName(user.getUsername(),user.getPassword());
 //    }
 
+    //remove the Response entity code
+    //    @PostMapping("/Signup")
+//    public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
+//        System.out.println(user.getEmailId() + user.getRole() + user.getAuthorities());
+//
+//        User savedUser = userService.addUser(user);
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("message", "Signup successful");
+//        response.put("userId", savedUser.getUserId()); // optional
+//        response.put("userName", savedUser.getUsername());
+//
+//        return ResponseEntity.ok(response);
+//    }
 }
