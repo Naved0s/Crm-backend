@@ -11,3 +11,14 @@ public class CrmSystemApplication {
 	}
 
 }
+/*
+{
+  "emailId": "john.doe@example.com",
+  "password": "123",
+  "userName":"Jhon",
+  "role":{
+      "roleId":1
+  }
+
+}
+ */

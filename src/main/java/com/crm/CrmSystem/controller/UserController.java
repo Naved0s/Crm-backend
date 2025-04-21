@@ -6,7 +6,11 @@ import com.crm.CrmSystem.services.RoleService;
 import com.crm.CrmSystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -32,17 +36,33 @@ public class UserController {
 //       return "Signup Done";
 //   }
 
-   @PostMapping("/newUser")
-    public String SignUp(@RequestBody User user){
-       userService.addUser(user);
-       return "User Register Successfully!";
-//       "userName":"pojo",
-//               "password":"1234",
-//               "emailId":"pojo@gmail.com",
-//               "role":{
-//           "roleId":1
-//       }
+
+    @PostMapping("/Signup")
+    public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
+        System.out.println(user.getEmailId() + user.getRole() + user.getAuthorities());
+
+        User savedUser = userService.addUser(user);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Signup successful");
+        response.put("userId", savedUser.getUserId()); // optional
+        response.put("userName", savedUser.getUsername());
+
+        return ResponseEntity.ok(response);
     }
+
+
+//   @PostMapping("/Signup")
+//    public String SignUp(@RequestBody User user){
+//       userService.addUser(user);
+//       return "User Register Successfully!";
+////       "userName":"pojo",
+////               "password":"1234",
+////               "emailId":"pojo@gmail.com",
+////               "role":{
+////           "roleId":1
+////       }
+//    }
 //
 //    @GetMapping("/userid")
 //    public String getUser(@RequestParam long id) {
