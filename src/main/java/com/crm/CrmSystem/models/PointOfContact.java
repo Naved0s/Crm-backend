@@ -20,5 +20,5 @@ public class PointOfContact {
     private String companyName;
     private String pocPhoneNumber;
     private String pocEmail;
-    private String password;
+   // private String password;
 }

@@ -24,6 +24,10 @@ public class LeadSource {
     @Column(name = "sourceName")
     private String sourceName;
 
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "pocId")
+    private PointOfContact poc;
+
 
     @Enumerated(EnumType.STRING)
     private SourceType sourceType;
