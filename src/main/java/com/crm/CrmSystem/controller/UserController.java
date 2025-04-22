@@ -38,6 +38,11 @@ public class UserController {
        return userService.login(user.getEmailId(),user.getPassword()) ;
     }
 
+    @GetMapping("/all")
+    public List<User> getall(){
+        return userService.getAll();
+    }
+
 
 
 

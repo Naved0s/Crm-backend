@@ -1,48 +1,32 @@
 package com.crm.CrmSystem.controller;
 
-import com.crm.CrmSystem.models.Lead;
-import com.crm.CrmSystem.repository.LeadRepository;
 import com.crm.CrmSystem.services.LeadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-
 @RestController
-@RequestMapping("/lead")
+@RequestMapping("/leads")
 @CrossOrigin(origins = "*")
 public class LeadController {
-
     @Autowired
-    LeadService leadService;
+    LeadService leadservice;
 
-    @PostMapping("/addlead")
-    public Lead addlead(@RequestBody Lead lead){
-     //   lead.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        return leadService.addlead(lead);
+    @GetMapping("/add/{leadId}")
+    public ResponseEntity<String> addLead(@PathVariable int leadId) {
+        try {
+            leadservice.addleads(leadId);
+            return ResponseEntity.ok("Lead added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to add lead: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/getall")
-    public List<Lead> getall(){
-        return leadService.getAllLead();
+    @PutMapping("/edit/{leadId}")
+    public void changeStatus(@PathVariable int leadId,@RequestParam String status){
+
+        leadservice.changeStatus(leadId,status);
     }
-
-//    @PutMapping("/update")
-//    public void updateLead(@RequestParam String leadStatus, @RequestParam int id){
-//        leadService.updateLead(leadStatus,id);
-//    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateLead(@PathVariable int id, @RequestBody String leadStatus) {
-
-            leadService.updateLead(id, leadStatus);
-            System.out.println("This is latest status:"+leadStatus);
-            return ResponseEntity.ok("Updated lead status to " + leadStatus);
-
-    }
-
-
 }

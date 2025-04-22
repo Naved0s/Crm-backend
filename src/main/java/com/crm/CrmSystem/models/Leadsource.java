@@ -1,6 +1,6 @@
 package com.crm.CrmSystem.models;
-
 import com.crm.CrmSystem.models.enums.SourceType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +35,11 @@ public class Leadsource {
    private String CompanyAdd;
    private String LeadEmail;
 
-
+   @JsonProperty("crmService")
+   public void setCrmServiceFromId(int serviceId) {
+      this.crmService = new CrmService();
+      this.crmService.setServiceId(serviceId);
+   }
 
 
 }

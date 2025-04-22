@@ -1,6 +1,7 @@
 package com.crm.CrmSystem.models;
 
 import com.crm.CrmSystem.repository.RoleRepository;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,13 @@ public class User implements UserDetails {
         this.userName = userName;
     }
 
+    //Mapping the role with id from user input;
+    @JsonProperty("role")
+    public void SetRolefromUser(int roleid) {
+        this.role = new Role();
+        this.role.setRoleId(roleid);
+    }
+
 
 
 
@@ -63,8 +71,6 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("Role_"+role.getRoleId()));
     }
 
-//    @Override
-//    public String getUsername() {
-//        return userName;
-//    }
+
+
 }

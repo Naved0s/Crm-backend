@@ -1,5 +1,6 @@
 package com.crm.CrmSystem.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class CrmService {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int serviceId;
@@ -25,6 +28,8 @@ public class CrmService {
     private int durationInDays;
     @Column(name = "description")
     private String description;
+
+
 
 
 

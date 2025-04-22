@@ -1,11 +1,15 @@
 package com.crm.CrmSystem.services;
 
+import com.crm.CrmSystem.models.Role;
 import com.crm.CrmSystem.models.User;
+import com.crm.CrmSystem.repository.RoleRepository;
 import com.crm.CrmSystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -15,15 +19,27 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     //Register User
     public User addUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        Role role = roleRepository.findById(user.getRole().getRoleId())
+//                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        // Set the fetched role to the user
+      //  user.setRole(role);
         return userRepository.save(user);
     }
 
     //Find User
     public User findUser(long id){
         return userRepository.findById(id).orElseThrow();
+    }
+
+    public List<User> getAll(){
+        return userRepository.findAll();
     }
 
     //Login
