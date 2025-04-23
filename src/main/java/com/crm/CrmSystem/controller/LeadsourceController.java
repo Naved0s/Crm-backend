@@ -3,6 +3,7 @@ package com.crm.CrmSystem.controller;
 import com.crm.CrmSystem.models.Leadsource;
 import com.crm.CrmSystem.services.LeadsourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,4 +26,17 @@ public class LeadsourceController {
     public List<Leadsource> getall(){
         return leadsourceService.getall();
     }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<String> remove(@PathVariable int id){
+        leadsourceService.removeLeadSource(id);
+        return ResponseEntity.ok("Removed this id:"+id);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<String> edit(@PathVariable int id, @RequestBody Leadsource ls){
+        leadsourceService.editLeadsource(id,ls);
+        return ResponseEntity.ok("Edited this id :"+id);
+    }
+
 }
