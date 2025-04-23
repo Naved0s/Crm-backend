@@ -30,13 +30,13 @@ public class LeadsourceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> remove(@PathVariable int id){
         leadsourceService.removeLeadSource(id);
-        return ResponseEntity.ok("Removed this id:"+id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> edit(@PathVariable int id, @RequestBody Leadsource ls){
         leadsourceService.editLeadsource(id,ls);
-        return ResponseEntity.ok("Edited this id :"+id);
+        return ResponseEntity.ok().build();
     }
 
 }
