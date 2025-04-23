@@ -10,6 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -23,20 +28,31 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/Signup","/Login","/LoginU","/leadsource/**","/service/**","/lead/**","/update/**", "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html","/leads/**","/all").permitAll()
-                        //.requestMatchers("/","/signup","/userid","/login").permitAll()
-                        //.requestMatchers("/userid").hasRole("ADMIN") // Requires ROLE_ADMIN
-                        .anyRequest().authenticated()
-                ).userDetailsService(userDetailService);
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:4200")); // or "*", but avoid in prod
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true); // Needed if you're sending cookies or auth headers
 
-        return http.build();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
+
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+            http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/", "/Signup","/Login","/LoginU","/leadsource/**","/service/**","/lead/**","/update/**", "/v3/api-docs/**",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html","/leads/**","/all").permitAll()
+                            //.requestMatchers("/","/signup","/userid","/login").permitAll()
+                            //.requestMatchers("/userid").hasRole("ADMIN") // Requires ROLE_ADMIN
+                            .anyRequest().authenticated()
+                    ).userDetailsService(userDetailService);
+
+            return http.build();
+        }
 }

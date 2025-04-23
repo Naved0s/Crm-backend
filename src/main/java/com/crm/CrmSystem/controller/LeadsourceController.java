@@ -27,7 +27,7 @@ public class LeadsourceController {
         return leadsourceService.getall();
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> remove(@PathVariable int id){
         leadsourceService.removeLeadSource(id);
         return ResponseEntity.ok("Removed this id:"+id);
