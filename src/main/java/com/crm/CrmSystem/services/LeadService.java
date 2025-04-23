@@ -8,6 +8,7 @@ import com.crm.CrmSystem.repository.LeadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,14 +20,40 @@ public class LeadService {
     LeadsourceRepository leadsourceRepository;
 
     //add leads from leadsource
-    public void addleads(int leadId){
-      Optional<Leadsource> l = leadsourceRepository.findById(leadId);
-        System.out.println(l.get().getLeadName());
-     Lead l1 = new Lead();
-     l1.setLeadsource(l.get());
-     l1.setLeadStatus(LeadStatus.valueOf("NEW_LEAD"));
-     leadRepository.save(l1);
+//    public void addleads(int leadId){
+//
+//        System.out.println(l.get().getLeadName());
+//     Lead l1 = new Lead();
+//
+//     l1.setLeadsource(l.get());
+//     l1.setLeadStatus(LeadStatus.valueOf("NEW_LEAD"));
+//        System.out.println(l1.getLeadStatus());
+//     leadRepository.save(l1);
+//    }
+    public void addleads(int leadId) {
+        Optional<Leadsource> l = leadsourceRepository.findById(leadId);
+        if (l.isPresent()) {
+            Leadsource leadsource = l.get();
+
+            // ✅ Correct check: use Leadsource object, not ID
+            Optional<Lead> existingLead = leadRepository.findByLeadsource(leadsource);
+
+            if (existingLead.isPresent()) {
+                System.out.println("Lead already exists for this Leadsource.");
+                return; // Duplicate found, do not save
+            }
+
+            Lead l1 = new Lead();
+            l1.setLeadsource(leadsource);
+            l1.setLeadStatus(LeadStatus.NEW_LEAD);
+
+            leadRepository.save(l1);
+            System.out.println("Lead saved with status: " + l1.getLeadStatus());
+        } else {
+            throw new IllegalArgumentException("Leadsource with ID " + leadId + " not found");
+        }
     }
+
 
     //change status of lead
     public boolean changeStatus(int id, String newStatus){
@@ -39,4 +66,35 @@ public class LeadService {
         }
       return false;
     }
+
+    //get all leadsources;
+    public List<Leadsource> getall(){
+        return leadsourceRepository.findAll();
+    }
+
+    //Get all leads
+    public List<Lead> get(){
+        return leadRepository.findAll();
+    }
+
+    //leadsources,leads,qualified leads,new leads;
+
+    //total number of leadsource
+    public long noOfleadsource(){
+        return leadsourceRepository.count();
+    }
+
+    //total number of leads
+    public long noOfLeads(){
+        return leadRepository.count();
+    }
+
+        //total number of new Leads
+        public int noOfNewLeads(){
+            return (int) leadRepository.findAll().stream().filter(
+                    lead -> lead.getLeadStatus()==(LeadStatus.NEW_LEAD)
+            ).count();
+        }
+
+
 }

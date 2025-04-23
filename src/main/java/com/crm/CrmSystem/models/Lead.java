@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @AllArgsConstructor
@@ -21,6 +23,7 @@ public class Lead {
 
     @ManyToOne
     @JoinColumn(name = "leadSourceId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Leadsource leadsource;
 
     @Enumerated(EnumType.STRING)

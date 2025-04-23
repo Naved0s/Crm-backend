@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "LeadsourceNew")
+@Table(name = "Leadsource")
 public class Leadsource {
 
    @Id
