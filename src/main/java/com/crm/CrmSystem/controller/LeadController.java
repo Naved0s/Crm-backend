@@ -23,7 +23,8 @@ public class LeadController {
 
     @GetMapping("/all")
     public List<Leadsource> getall(){
-       return leadsourceService.getall();
+       //return leadsourceService.getall();
+        return  leadservice.getAvailableLeadSources();
     }
 
     @GetMapping("/leadsall")
@@ -36,18 +37,18 @@ public class LeadController {
     public ResponseEntity<String> addLead(@PathVariable int leadId) {
         try {
             leadservice.addleads(leadId);
-            return ResponseEntity.ok("Lead added successfully");
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to add lead: " + e.getMessage());
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PutMapping("/edit/{leadId}")
-    public void changeStatus(@PathVariable int leadId,@RequestParam String status){
-
-        leadservice.changeStatus(leadId,status);
-    }
+        @PutMapping("/edit/{leadId}")
+        public ResponseEntity<String> changeStatus(@PathVariable int leadId,@RequestParam String status){
+            leadservice.changeStatus(leadId,status);
+            return ResponseEntity.ok().build();
+        }
 
     //leadsources,leads,qualified leads,new leads;
     @GetMapping("/sourceno")

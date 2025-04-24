@@ -21,6 +21,7 @@ public class LeadsourceService {
 
     //getting all leadsource
     public List<Leadsource> getall(){
+
         return leadsourceRepository.findAll();
     }
 
@@ -59,9 +60,13 @@ public class LeadsourceService {
 
             if (ls.getLeadName() != null)
                 existing.setLeadName(ls.getLeadName());
+            if(ls.getCompanyName() != null)
+                existing.setCompanyName(ls.getCompanyName());
 
             leadsourceRepository.save(existing);
-        } else {
+        }
+
+        else {
             throw new RuntimeException("Leadsource not found with id " + id);
         }
     }
