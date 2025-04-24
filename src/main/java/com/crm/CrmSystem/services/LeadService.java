@@ -8,6 +8,7 @@ import com.crm.CrmSystem.repository.LeadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class LeadService {
 //        System.out.println(l1.getLeadStatus());
 //     leadRepository.save(l1);
 //    }
-    public void addleads(int leadId) {
+    public void addleads(int leadId,String timestamp) {
         Optional<Leadsource> l = leadsourceRepository.findById(leadId);
         if (l.isPresent()) {
             Leadsource leadsource = l.get();
@@ -44,12 +45,20 @@ public class LeadService {
                 return; // Duplicate found, do not save
             }
 
+            if(timestamp.isEmpty() || timestamp ==null)
+                timestamp = LocalDateTime.now().toString();
+
+
+           LocalDateTime ls =  LocalDateTime.parse(timestamp);
+
+
             Lead l1 = new Lead();
             l1.setLeadsource(leadsource);
             l1.setLeadStatus(LeadStatus.NEW_LEAD);
+            l1.setTimeStamp(ls);
 
             leadRepository.save(l1);
-            System.out.println("Lead saved with status: " + l1.getLeadStatus());
+            System.out.println("Lead saved with status: " + l1.getLeadStatus() + l1.getTimeStamp());
         } else {
             throw new IllegalArgumentException("Leadsource with ID " + leadId + " not found");
         }

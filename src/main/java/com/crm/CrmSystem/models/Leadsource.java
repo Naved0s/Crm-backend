@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Entity
 @Getter
 @Setter
@@ -34,6 +37,8 @@ public class Leadsource {
    private String CompanyName;
    private String CompanyAdd;
    private String LeadEmail;
+
+   private LocalDateTime timeStamp;
 
    @JsonProperty("crmService")
    public void setCrmServiceFromId(int serviceId) {

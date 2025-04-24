@@ -9,6 +9,9 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Entity
 @AllArgsConstructor
 @Getter
@@ -28,6 +31,9 @@ public class Lead {
 
     @Enumerated(EnumType.STRING)
     private LeadStatus leadStatus;
+
+    private LocalDateTime timeStamp;
+
 
 
 

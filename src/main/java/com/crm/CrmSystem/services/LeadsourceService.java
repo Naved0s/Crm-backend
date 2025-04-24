@@ -5,6 +5,7 @@ import com.crm.CrmSystem.repository.LeadsourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ public class LeadsourceService {
 
     //adding leadsource logic
     public Leadsource addLeadsource(Leadsource leadsource){
+        if (leadsource.getTimeStamp() ==null)
+            leadsource.setTimeStamp(LocalDateTime.now());
        return leadsourceRepository.save(leadsource);
     }
 
@@ -62,6 +65,8 @@ public class LeadsourceService {
                 existing.setLeadName(ls.getLeadName());
             if(ls.getCompanyName() != null)
                 existing.setCompanyName(ls.getCompanyName());
+            if(ls.getTimeStamp() != null)
+                existing.setTimeStamp(ls.getTimeStamp());
 
             leadsourceRepository.save(existing);
         }
