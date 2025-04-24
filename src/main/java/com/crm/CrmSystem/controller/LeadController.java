@@ -34,9 +34,9 @@ public class LeadController {
 
 
     @PostMapping("/add/{leadId}")
-    public ResponseEntity<String> addLead(@PathVariable int leadId,@RequestParam String datetime) {
+    public ResponseEntity<String> addLead(@PathVariable int leadId) {
         try {
-            leadservice.addleads(leadId,datetime);
+            leadservice.addleads(leadId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             System.out.println(e);

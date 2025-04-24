@@ -47,7 +47,7 @@ public class SecurityConfig {
                     .authorizeHttpRequests(auth -> auth
                             .requestMatchers("/", "/Signup","/Login","/LoginU","/leadsource/**","/service/**","/lead/**","/update/**", "/v3/api-docs/**",
                                     "/swagger-ui/**",
-                                    "/swagger-ui.html","/leads/**","/all").permitAll()
+                                    "/swagger-ui.html","/leads/**","/all","/salesLeads/**").permitAll()
                             //.requestMatchers("/","/signup","/userid","/login").permitAll()
                             //.requestMatchers("/userid").hasRole("ADMIN") // Requires ROLE_ADMIN
                             .anyRequest().authenticated()

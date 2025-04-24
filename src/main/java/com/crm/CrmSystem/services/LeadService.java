@@ -21,6 +21,9 @@ public class LeadService {
     @Autowired
     LeadsourceRepository leadsourceRepository;
 
+    @Autowired
+    SalesLeadService salesLeadService;
+
     //add leads from leadsource
 //    public void addleads(int leadId){
 //
@@ -32,7 +35,7 @@ public class LeadService {
 //        System.out.println(l1.getLeadStatus());
 //     leadRepository.save(l1);
 //    }
-    public void addleads(int leadId,String timestamp) {
+    public void addleads(int leadId) {
         Optional<Leadsource> l = leadsourceRepository.findById(leadId);
         if (l.isPresent()) {
             Leadsource leadsource = l.get();
@@ -45,8 +48,8 @@ public class LeadService {
                 return; // Duplicate found, do not save
             }
 
-            if(timestamp.isEmpty() || timestamp ==null)
-                timestamp = LocalDateTime.now().toString();
+//            if(timestamp.isEmpty() || timestamp ==null)
+            String  timestamp = LocalDateTime.now().toString();
 
 
            LocalDateTime ls =  LocalDateTime.parse(timestamp);
@@ -66,16 +69,21 @@ public class LeadService {
 
 
     //change status of lead
-    public boolean changeStatus(int id, String newStatus){
-        if (leadRepository.existsById(id)){
-            Lead l = leadRepository.findById(id).get();
-                    l.setLeadStatus(LeadStatus.valueOf(newStatus));
-            System.out.println("Lead status changed: "+ id + newStatus);
-                    leadRepository.save(l);
-            return true;
+        public boolean changeStatus(int id, String newStatus){
+            if (leadRepository.existsById(id)){
+                Lead l = leadRepository.findById(id).get();
+                        l.setLeadStatus(LeadStatus.valueOf(newStatus));
+                if(newStatus.equals(LeadStatus.QUALIFIED.toString())) {
+                    if (!salesLeadService.existsInSalesLead(l)) {
+                        salesLeadService.moveSingleLeadToSales(l);
+                    }
+                }
+                System.out.println("Lead status changed: "+ id + newStatus);
+                        leadRepository.save(l);
+                return true;
+            }
+          return false;
         }
-      return false;
-    }
 
     //get all leadsources;
     public List<Leadsource> getall(){
