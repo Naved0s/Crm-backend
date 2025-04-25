@@ -2,7 +2,6 @@ package com.crm.CrmSystem.services;
 
 import com.crm.CrmSystem.models.Lead;
 import com.crm.CrmSystem.models.SalesLead;
-import com.crm.CrmSystem.models.enums.LeadStatus;
 import com.crm.CrmSystem.models.enums.SalesLeadStatus;
 import com.crm.CrmSystem.repository.LeadRepository;
 import com.crm.CrmSystem.repository.SalesLeadRepository;
@@ -25,13 +24,13 @@ public class SalesLeadService {
         return salesLeadRepository.findAll();
     }
     public void moveQualifiedLeadsToSales() {
-        List<Lead> qualifiedLeads = leadRepository.findByLeadStatus(LeadStatus.QUALIFIED);
+        List<Lead> qualifiedLeads = leadRepository.findByLeadStatus(SalesLeadStatus.QUALIFIED);
 
         for (Lead lead : qualifiedLeads) {
             SalesLead salesLead = new SalesLead();
             salesLead.setLead(lead);
-            salesLead.setLeadStatus(SalesLeadStatus.NEW_LEAD); // Start as NEW_LEAD in sales pipeline
-            System.out.println("Added this lead to sales lead: "+ salesLead.getLeadStatus());
+           // salesLead.setLeadStatus(SalesLeadStatus.NEW_LEAD); // Start as NEW_LEAD in sales pipeline
+           // System.out.println("Added this lead to sales lead: "+ salesLead.getLeadStatus());
             salesLeadRepository.save(salesLead);
         }
     }
@@ -47,7 +46,7 @@ public class SalesLeadService {
     public void moveSingleLeadToSales(Lead lead) {
         SalesLead salesLead = new SalesLead();
         salesLead.setLead(lead);
-        salesLead.setLeadStatus(SalesLeadStatus.NEW_LEAD);
+       // salesLead.setLeadStatus(SalesLeadStatus.NEW_LEAD);
         salesLeadRepository.save(salesLead);
         System.out.println("✔ Added to SalesLead: " + lead.getLeadId());
     }

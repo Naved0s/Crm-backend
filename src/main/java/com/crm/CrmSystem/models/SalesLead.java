@@ -26,7 +26,7 @@ public class SalesLead {
     @JoinColumn(name = "leadId")
     Lead lead;
 
-    private SalesLeadStatus leadStatus;
+  // private SalesLeadStatus leadStatus;
 
 
     private LocalDateTime ProposedDate;

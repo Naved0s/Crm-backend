@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/salesLeads")
@@ -42,16 +43,23 @@ public class SalesLeadController {
         emailModel.setRecipient(l.getLead().getLeadsource().getLeadEmail());
         System.out.println(l.getLead().getLeadsource().getLeadEmail());
         l.setProposedValue(emailModel.getDealValue());
-        l.setLeadStatus(SalesLeadStatus.NEGOTIATED);
+        l.getLead().setLeadStatus(SalesLeadStatus.NEGOTIATED);
         l.setProposedDate(LocalDateTime.now());
         salesLeadRepository.save(l);
 
         // Send the email
         String status = emailService.sendSimpleMail(emailModel);
         System.out.println(status);
-        System.out.println(l.getLeadStatus() + " " + l.getProposedValue());
+      //  System.out.println(l.getLeadStatus() + " " + l.getProposedValue());
 
         return status;
+    }
+
+    @GetMapping("/getNego")
+    public List<SalesLead> getNegotiations() {
+        return salesLeadService.getall().stream()
+                .filter(salesLead -> salesLead.getLead().getLeadStatus() == SalesLeadStatus.NEGOTIATED)  // Compare directly with the enum
+                .collect(Collectors.toList());  // Use collect() if you're on Java 8 or earlier
     }
 
 }

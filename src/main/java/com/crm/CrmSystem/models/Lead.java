@@ -1,6 +1,6 @@
 package com.crm.CrmSystem.models;
 
-import com.crm.CrmSystem.models.enums.LeadStatus;
+import com.crm.CrmSystem.models.enums.SalesLeadStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @AllArgsConstructor
@@ -30,7 +29,7 @@ public class Lead {
     private Leadsource leadsource;
 
     @Enumerated(EnumType.STRING)
-    private LeadStatus leadStatus;
+    private SalesLeadStatus leadStatus;
 
     private LocalDateTime timeStamp;
 
