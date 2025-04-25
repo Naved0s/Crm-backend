@@ -56,7 +56,7 @@ public class LeadService {
 
             Lead l1 = new Lead();
             l1.setLeadsource(leadsource);
-            l1.setLeadStatus(SalesLeadStatus.QUALIFIED);
+            l1.setLeadStatus(SalesLeadStatus.NEW_LEAD);
             l1.setTimeStamp(ls);
 
             leadRepository.save(l1);
