@@ -52,6 +52,7 @@ public class EmailService implements EmailRepo {
 
         // Catch block to handle the exceptions
         catch (Exception e) {
+            System.out.println(e);
             return "Error while Sending Mail";
         }
     }

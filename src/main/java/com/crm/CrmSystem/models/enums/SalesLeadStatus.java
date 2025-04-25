@@ -4,6 +4,5 @@ public enum SalesLeadStatus {
     NEW_LEAD,
         WON,
     LOST,
-    CONTACTED,
-    QUALIFIED,
+    NEGOTIATED,
 }

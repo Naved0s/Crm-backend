@@ -14,5 +14,10 @@ public class EmailModel {
     private String msgBody;
     private String subject;
     private String attachment;
+    private double dealValue;
+
+    //proposed Value
+
+    //male --> negotation  sales lead --> email -- >propoed -- > negoatioan --> praposed--> negotation
 }
 

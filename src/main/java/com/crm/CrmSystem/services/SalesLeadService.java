@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SalesLeadService {
@@ -33,6 +34,10 @@ public class SalesLeadService {
             System.out.println("Added this lead to sales lead: "+ salesLead.getLeadStatus());
             salesLeadRepository.save(salesLead);
         }
+    }
+
+    public Optional<SalesLead> findbyId(int id){
+        return salesLeadRepository.findById(id);
     }
 
     public boolean existsInSalesLead(Lead lead) {

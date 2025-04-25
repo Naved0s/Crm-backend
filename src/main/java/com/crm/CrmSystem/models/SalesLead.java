@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -25,6 +27,11 @@ public class SalesLead {
     Lead lead;
 
     private SalesLeadStatus leadStatus;
+
+
+    private LocalDateTime ProposedDate;
+
+    private double proposedValue;
 
     @JsonProperty("lead")
     public void SetSalesLeadfromLead(int lid) {
