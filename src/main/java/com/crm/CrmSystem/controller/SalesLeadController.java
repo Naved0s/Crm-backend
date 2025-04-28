@@ -7,10 +7,13 @@ import com.crm.CrmSystem.repository.SalesLeadRepository;
 import com.crm.CrmSystem.services.EmailService;
 import com.crm.CrmSystem.services.SalesLeadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,7 +46,7 @@ public class SalesLeadController {
         emailModel.setRecipient(l.getLead().getLeadsource().getLeadEmail());
         System.out.println(l.getLead().getLeadsource().getLeadEmail());
         l.setProposedValue(emailModel.getDealValue());
-        l.getLead().setLeadStatus(SalesLeadStatus.NEGOTIATED);
+        l.getLead().setLeadStatus(SalesLeadStatus.PROPOSED);
         l.setProposedDate(LocalDateTime.now());
         salesLeadRepository.save(l);
 
@@ -58,8 +61,34 @@ public class SalesLeadController {
     @GetMapping("/getNego")
     public List<SalesLead> getNegotiations() {
         return salesLeadService.getall().stream()
-                .filter(salesLead -> salesLead.getLead().getLeadStatus() == SalesLeadStatus.NEGOTIATED)  // Compare directly with the enum
+                .filter(salesLead -> salesLead.getLead().getLeadStatus().equals(SalesLeadStatus.PROPOSED))  // Compare directly with the enum
                 .collect(Collectors.toList());  // Use collect() if you're on Java 8 or earlier
     }
+
+    @PostMapping("/updateNego/{id}")
+    public ResponseEntity<String> update(@RequestBody SalesLead salesLead, @PathVariable int id) {
+        // Fetch the existing SalesLead from the database by id
+        Optional<SalesLead> existingSalesLead = salesLeadService.findbyId(id);
+
+        if (existingSalesLead.isPresent()) {
+            SalesLead l1 = existingSalesLead.get();
+
+            // Update fields
+            l1.setClosedDate(salesLead.getClosedDate());
+            l1.setClosedValue(salesLead.getClosedValue());
+            l1.getLead().setLeadStatus(salesLead.getLead().getLeadStatus());
+
+            // Call service to save the updated SalesLead
+            salesLeadService.update(l1);
+
+            return ResponseEntity.ok("Sales Lead updated successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sales Lead not found!");
+        }
+    }
+
+
+
+
 
 }

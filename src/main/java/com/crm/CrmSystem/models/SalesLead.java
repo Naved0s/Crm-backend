@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 
 @Entity
 @Getter
@@ -33,9 +34,20 @@ public class SalesLead {
 
     private double proposedValue;
 
+    private double closedValue;
+
+    private LocalDateTime ClosedDate;
+
+
     @JsonProperty("lead")
     public void SetSalesLeadfromLead(int lid) {
         this.lead = new Lead();
         this.lead.setLeadId(lid);
+    }
+
+    @JsonProperty("lead")
+    public void setLeadFromJson(Lead leadsource) {
+       this.lead = new Lead();
+       this.lead.setLeadStatus(leadsource.getLeadStatus());
     }
 }

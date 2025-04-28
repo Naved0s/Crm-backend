@@ -5,5 +5,6 @@ public enum SalesLeadStatus {
         WON,
     LOST,
     NEGOTIATED,
-    QUALIFIED
+    QUALIFIED,
+    PROPOSED
 }

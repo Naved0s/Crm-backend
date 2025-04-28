@@ -51,4 +51,9 @@ public class SalesLeadService {
         System.out.println("✔ Added to SalesLead: " + lead.getLeadId());
     }
 
+    public void update(SalesLead lead){
+        salesLeadRepository.save(lead);
+
+    }
+
 }
