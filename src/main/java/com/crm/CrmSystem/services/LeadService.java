@@ -114,6 +114,8 @@ public class LeadService {
         }
 
     public List<Leadsource> getAvailableLeadSources() {
-        return leadsourceRepository.findAllUnusedLeadSources();
+        return leadsourceRepository.findAllUnusedLeadSources().stream().filter(
+                leadsource -> leadsource.isActive()
+        ).toList();
     }
 }

@@ -29,7 +29,9 @@ public class LeadsourceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> remove(@PathVariable int id){
+
         leadsourceService.removeLeadSource(id);
+        System.out.println("removed:"+id);
         return ResponseEntity.ok().build();
     }
 

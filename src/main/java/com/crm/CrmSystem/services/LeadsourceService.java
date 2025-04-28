@@ -18,20 +18,26 @@ public class LeadsourceService {
     //adding leadsource logic
     public Leadsource addLeadsource(Leadsource leadsource){
         if (leadsource.getTimeStamp() ==null)
-            leadsource.setTimeStamp(LocalDateTime.now());
+            leadsource.setTimeStamp(LocalDateTime.now().toString());
        return leadsourceRepository.save(leadsource);
     }
 
     //getting all leadsource
     public List<Leadsource> getall(){
 
-        return leadsourceRepository.findAll();
+        return leadsourceRepository.findAll().stream().filter(
+                leadsource -> leadsource.isActive()
+        ).toList();
     }
 
     //delete a lead source
     public boolean removeLeadSource(int id){
         if(leadsourceRepository.findById(id).isPresent()){
-            leadsourceRepository.deleteById(id);
+
+            Leadsource l1 = leadsourceRepository.findById(id).get();
+            l1.setActive(false);
+            leadsourceRepository.save(l1);
+            //leadsourceRepository.deleteById(id);
             return true;
         }
         return false;
@@ -48,9 +54,6 @@ public class LeadsourceService {
 
             if (ls.getCrmService() != null)
                 existing.setCrmService(ls.getCrmService());
-
-            if (ls.getDescription() != null)
-                existing.setDescription(ls.getDescription());
 
             if (ls.getContactNo() != null)
                 existing.setContactNo(ls.getContactNo());

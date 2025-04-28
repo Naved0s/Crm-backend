@@ -25,7 +25,8 @@ public class Leadsource {
    @Enumerated(EnumType.STRING)
    private SourceType sourceType;
 
-   private String description;
+
+   private boolean isActive =true;
 
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "service_id")
@@ -38,13 +39,14 @@ public class Leadsource {
    private String CompanyAdd;
    private String LeadEmail;
 
-   private LocalDateTime timeStamp;
+   private String timeStamp;
 
    @JsonProperty("crmService")
    public void setCrmServiceFromId(int serviceId) {
       this.crmService = new CrmService();
       this.crmService.setServiceId(serviceId);
    }
+
 
 
 }
