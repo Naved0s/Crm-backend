@@ -38,6 +38,9 @@ public class SalesLead {
 
     private LocalDateTime ClosedDate;
 
+    private String dealName;
+
+
 
     @JsonProperty("lead")
     public void SetSalesLeadfromLead(int lid) {

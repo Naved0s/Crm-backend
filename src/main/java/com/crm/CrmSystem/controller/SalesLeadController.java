@@ -74,6 +74,8 @@ public class SalesLeadController {
             SalesLead l1 = existingSalesLead.get();
 
             // Update fields
+            //deal name //
+            l1.setDealName(salesLead.getDealName());
             l1.setClosedDate(salesLead.getClosedDate());
             l1.setClosedValue(salesLead.getClosedValue());
             l1.getLead().setLeadStatus(salesLead.getLead().getLeadStatus());
@@ -86,9 +88,6 @@ public class SalesLeadController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sales Lead not found!");
         }
     }
-
-
-
 
 
 }
