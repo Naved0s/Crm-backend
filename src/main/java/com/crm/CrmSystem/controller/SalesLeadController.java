@@ -2,6 +2,7 @@ package com.crm.CrmSystem.controller;
 
 import com.crm.CrmSystem.models.EmailModel;
 import com.crm.CrmSystem.models.SalesLead;
+import com.crm.CrmSystem.models.enums.LeadStatus;
 import com.crm.CrmSystem.models.enums.SalesLeadStatus;
 import com.crm.CrmSystem.repository.SalesLeadRepository;
 import com.crm.CrmSystem.services.EmailService;
@@ -32,7 +33,12 @@ public class SalesLeadController {
     // Endpoint to get all qualified sales leads
     @GetMapping("/qualified")
     public List<SalesLead> getQualifiedSalesLeads() {
-        return salesLeadService.getall();
+        return salesLeadService.getall().stream().filter(
+                salesLead ->
+                    salesLead.getDealStatus() == SalesLeadStatus.NEW_LEAD ||
+                            salesLead.getDealStatus() == SalesLeadStatus.PROPOSED
+
+        ).toList() ;
     }
 
     @PostMapping("/sendmail/{id}")
@@ -46,8 +52,8 @@ public class SalesLeadController {
         emailModel.setRecipient(l.getLead().getLeadsource().getLeadEmail());
         System.out.println(l.getLead().getLeadsource().getLeadEmail());
         l.setProposedValue(emailModel.getDealValue());
-        l.getLead().setLeadStatus(SalesLeadStatus.PROPOSED);
-        l.setProposedDate(LocalDateTime.now());
+       l.setDealStatus(SalesLeadStatus.PROPOSED);
+        l.setProposedDate(emailModel.getProposedTime());
         salesLeadRepository.save(l);
 
         // Send the email
@@ -60,12 +66,11 @@ public class SalesLeadController {
 
     @GetMapping("/getNego")
     public List<SalesLead> getNegotiations() {
-        return salesLeadService.getall().stream()
-                .filter(salesLead -> salesLead.getLead().getLeadStatus().equals(SalesLeadStatus.PROPOSED))  // Compare directly with the enum
-                .collect(Collectors.toList());  // Use collect() if you're on Java 8 or earlier
+        return salesLeadService.getall();        // Compare directly with the enum
+                //.collect(Collectors.toList());  // Use collect() if you're on Java 8 or earlier
     }
 
-    @PostMapping("/updateNego/{id}")
+    @PutMapping("/updateNego/{id}")
     public ResponseEntity<String> update(@RequestBody SalesLead salesLead, @PathVariable int id) {
         // Fetch the existing SalesLead from the database by id
         Optional<SalesLead> existingSalesLead = salesLeadService.findbyId(id);
@@ -78,7 +83,9 @@ public class SalesLeadController {
             l1.setDealName(salesLead.getDealName());
             l1.setClosedDate(salesLead.getClosedDate());
             l1.setClosedValue(salesLead.getClosedValue());
-            l1.getLead().setLeadStatus(salesLead.getLead().getLeadStatus());
+            l1.setDealStatus(salesLead.getDealStatus());
+            System.out.println(salesLead.getClosedValue());
+           // System.out.println(salesLead.getLead().getLeadStatus());
 
             // Call service to save the updated SalesLead
             salesLeadService.update(l1);
@@ -87,6 +94,13 @@ public class SalesLeadController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sales Lead not found!");
         }
+    }
+
+    @GetMapping("/wins")
+    public List<SalesLead> getDeals(){
+        return salesLeadService.getall().stream().filter(
+                salesLead -> salesLead.getDealStatus().equals(SalesLeadStatus.WON)
+        ).toList();
     }
 
 

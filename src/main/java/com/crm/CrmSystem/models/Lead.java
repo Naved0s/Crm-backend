@@ -1,5 +1,6 @@
 package com.crm.CrmSystem.models;
 
+import com.crm.CrmSystem.models.enums.LeadStatus;
 import com.crm.CrmSystem.models.enums.SalesLeadStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,9 +30,9 @@ public class Lead {
     private Leadsource leadsource;
 
     @Enumerated(EnumType.STRING)
-    private SalesLeadStatus leadStatus;
+    private LeadStatus leadStatus;
 
-    private LocalDateTime timeStamp;
+    private String timeStamp;
 
 
 

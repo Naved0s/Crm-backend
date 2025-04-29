@@ -2,6 +2,7 @@ package com.crm.CrmSystem.services;
 
 import com.crm.CrmSystem.models.Lead;
 import com.crm.CrmSystem.models.SalesLead;
+import com.crm.CrmSystem.models.enums.LeadStatus;
 import com.crm.CrmSystem.models.enums.SalesLeadStatus;
 import com.crm.CrmSystem.repository.LeadRepository;
 import com.crm.CrmSystem.repository.SalesLeadRepository;
@@ -23,17 +24,17 @@ public class SalesLeadService {
     public List<SalesLead> getall() {
         return salesLeadRepository.findAll();
     }
-    public void moveQualifiedLeadsToSales() {
-        List<Lead> qualifiedLeads = leadRepository.findByLeadStatus(SalesLeadStatus.QUALIFIED);
-
-        for (Lead lead : qualifiedLeads) {
-            SalesLead salesLead = new SalesLead();
-            salesLead.setLead(lead);
-           // salesLead.setLeadStatus(SalesLeadStatus.NEW_LEAD); // Start as NEW_LEAD in sales pipeline
-           // System.out.println("Added this lead to sales lead: "+ salesLead.getLeadStatus());
-            salesLeadRepository.save(salesLead);
-        }
-    }
+//    public void moveQualifiedLeadsToSales() {
+//        List<Lead> qualifiedLeads = leadRepository.findByLeadStatus(LeadStatus.QUALIFIED);
+//
+//        for (Lead lead : qualifiedLeads) {
+//            SalesLead salesLead = new SalesLead();
+//            salesLead.setLead(lead);
+//           // salesLead.setLeadStatus(SalesLeadStatus.NEW_LEAD); // Start as NEW_LEAD in sales pipeline
+//           // System.out.println("Added this lead to sales lead: "+ salesLead.getLeadStatus());
+//            salesLeadRepository.save(salesLead);
+//        }
+//    }
 
     public Optional<SalesLead> findbyId(int id){
         return salesLeadRepository.findById(id);
@@ -45,6 +46,7 @@ public class SalesLeadService {
 
     public void moveSingleLeadToSales(Lead lead) {
         SalesLead salesLead = new SalesLead();
+        salesLead.setDealStatus(SalesLeadStatus.NEW_LEAD);
         salesLead.setLead(lead);
        // salesLead.setLeadStatus(SalesLeadStatus.NEW_LEAD);
         salesLeadRepository.save(salesLead);

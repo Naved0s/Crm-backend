@@ -2,6 +2,7 @@ package com.crm.CrmSystem.services;
 
 import com.crm.CrmSystem.models.Leadsource;
 import com.crm.CrmSystem.models.Lead;
+import com.crm.CrmSystem.models.enums.LeadStatus;
 import com.crm.CrmSystem.models.enums.SalesLeadStatus;
 import com.crm.CrmSystem.repository.LeadsourceRepository;
 import com.crm.CrmSystem.repository.LeadRepository;
@@ -51,13 +52,11 @@ public class LeadService {
             String  timestamp = LocalDateTime.now().toString();
 
 
-           LocalDateTime ls =  LocalDateTime.parse(timestamp);
-
 
             Lead l1 = new Lead();
             l1.setLeadsource(leadsource);
-            l1.setLeadStatus(SalesLeadStatus.NEW_LEAD);
-            l1.setTimeStamp(ls);
+    l1.setLeadStatus(LeadStatus.NEW_LEAD);
+            l1.setTimeStamp(timestamp);
 
             leadRepository.save(l1);
             System.out.println("Lead saved with status: " + l1.getLeadStatus() + l1.getTimeStamp());
@@ -71,8 +70,9 @@ public class LeadService {
         public boolean changeStatus(int id, String newStatus){
             if (leadRepository.existsById(id)){
                 Lead l = leadRepository.findById(id).get();
-                        l.setLeadStatus(SalesLeadStatus.valueOf(newStatus));
-                if(newStatus.equals(SalesLeadStatus.QUALIFIED.toString())) {
+
+                l.setLeadStatus(LeadStatus.valueOf(newStatus));
+                if(newStatus.equals(LeadStatus.QUALIFIED.toString())) {
                     if (!salesLeadService.existsInSalesLead(l)) {
                         salesLeadService.moveSingleLeadToSales(l);
                     }
@@ -109,7 +109,7 @@ public class LeadService {
         //total number of new Leads
         public int noOfNewLeads(){
             return (int) leadRepository.findAll().stream().filter(
-                    lead -> lead.getLeadStatus() ==(SalesLeadStatus.NEW_LEAD)
+                    lead -> lead.getLeadStatus() ==(LeadStatus.NEW_LEAD)
             ).count();
         }
 

@@ -30,15 +30,18 @@ public class SalesLead {
   // private SalesLeadStatus leadStatus;
 
 
-    private LocalDateTime ProposedDate;
+    private String ProposedDate;
 
     private double proposedValue;
 
     private double closedValue;
 
-    private LocalDateTime ClosedDate;
+    private String ClosedDate;
 
     private String dealName;
+
+    @Enumerated(EnumType.STRING)
+    private SalesLeadStatus dealStatus;
 
 
 
@@ -48,9 +51,9 @@ public class SalesLead {
         this.lead.setLeadId(lid);
     }
 
-    @JsonProperty("lead")
-    public void setLeadFromJson(Lead leadsource) {
-       this.lead = new Lead();
-       this.lead.setLeadStatus(leadsource.getLeadStatus());
-    }
+//    @JsonProperty("lead")
+//    public void setLeadFromJson(Lead leadsource) {
+//       this.lead = new Lead();
+//       this.lead.setLeadStatus(leadsource.getLeadStatus());
+//    }
 }
