@@ -1,6 +1,7 @@
 package com.crm.CrmSystem.services;
 
 import com.crm.CrmSystem.models.Lead;
+import com.crm.CrmSystem.models.Leadsource;
 import com.crm.CrmSystem.models.SalesLead;
 import com.crm.CrmSystem.models.enums.LeadStatus;
 import com.crm.CrmSystem.models.enums.SalesLeadStatus;
@@ -56,6 +57,33 @@ public class SalesLeadService {
     public void update(SalesLead lead){
         salesLeadRepository.save(lead);
 
+    }
+
+    public void editLeadsource(SalesLead ls){
+        Optional<SalesLead> l2 = salesLeadRepository.findById(ls.getSalesLeadId());
+        if (l2.isPresent()) {
+            SalesLead existing = l2.get();
+
+            if (ls.getLead() != null)
+                existing.setLead(ls.getLead());
+
+            if (ls.getProposedValue() == 0.0)
+                existing.setProposedValue(ls.getProposedValue());
+
+            if (ls.getClosedDate() != null)
+                existing.setClosedDate(ls.getClosedDate());
+
+            if (ls.getProposedDate() != null)
+                existing.setProposedDate(ls.getProposedDate());
+
+            ls.getLead().setLeadStatus(ls.getLead().getLeadStatus());
+
+           salesLeadRepository.save(ls);
+        }
+
+        else {
+            throw new RuntimeException("Leadsource not found with id " + ls.getLead());
+        }
     }
 
 }
