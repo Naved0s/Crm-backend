@@ -1,10 +1,12 @@
 package com.crm.CrmSystem.controller;
 
 import com.crm.CrmSystem.models.EmailModel;
+import com.crm.CrmSystem.models.Lead;
 import com.crm.CrmSystem.models.SalesLead;
 import com.crm.CrmSystem.models.enums.LeadStatus;
 import com.crm.CrmSystem.models.enums.SalesLeadStatus;
 import com.crm.CrmSystem.repository.SalesLeadRepository;
+import com.crm.CrmSystem.services.ClientService;
 import com.crm.CrmSystem.services.EmailService;
 import com.crm.CrmSystem.services.SalesLeadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class SalesLeadController {
 
     @Autowired
     private SalesLeadRepository salesLeadRepository;
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     EmailService emailService;
@@ -105,6 +110,29 @@ public class SalesLeadController {
         ).toList();
     }
 
+    @PostMapping("/sendCredentials/{id}")
+    public ResponseEntity<String> sendCrdentials(@PathVariable int id ){
+       SalesLead s1 = salesLeadService.findbyId(id).get();
+       String email = s1.getLead().getLeadsource().getLeadEmail();
+       String body = "Hi client your Logged in credentials are:"+email+"password : 123";
+       String subject = " Welcome Your Login Credentials are Here";
+       emailService.sendSimpleMail(new EmailModel(email,body,subject));
+       clientService.sendCredentials(id);
+        return ResponseEntity.ok("Email Send to "+id);
+    }
+
+
+
+    @PostMapping("/setNego/{id}")
+    public void setNegotiation(@RequestBody SalesLead lead,@PathVariable int id){
+        System.out.println(id);
+        SalesLead l1 = salesLeadService.findbyId(id).get();
+        l1.setClosedDate(lead.getClosedDate());
+        l1.setClosedValue(lead.getClosedValue());
+        l1.getLead().setLeadStatus(lead.getLead().getLeadStatus());
+        salesLeadService.editLeadsource(lead);
+
+    }
 
 
 }

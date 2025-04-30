@@ -45,6 +45,10 @@ public class SalesLead {
 
 
 
+
+
+
+
     @JsonProperty("lead")
     public void SetSalesLeadfromLead(int lid) {
         this.lead = new Lead();
