@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -111,22 +113,32 @@ public class SalesLeadController {
     }
 
     @PostMapping("/sendCredentials/{id}")
-    public ResponseEntity<String> sendCrdentials(@PathVariable int id ){
+    public ResponseEntity<Map<String, String>> sendCredentials(@PathVariable int id) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            SalesLead s1 = salesLeadService.findbyId(id)
+                    .orElseThrow(() -> new RuntimeException("SalesLead not found for ID: " + id));
 
-       SalesLead s1 = salesLeadService.findbyId(id).get();
-       String email = s1.getLead().getLeadsource().getLeadEmail();
-       String body = "Hi client your Logged in credentials are:"+email+"password : 123";
-       String subject = " Welcome Your Login Credentials are Here";
-       if(  clientService.sendCredentials(id)){
-           emailService.sendSimpleMail(new EmailModel(email,body,subject));
-           return ResponseEntity.ok("Email Send to "+id);
+            String email = s1.getLead().getLeadsource().getLeadEmail();
+            String body = "Hi client, your login credentials are:\nEmail: " + email + "\nPassword: 123";
+            String subject = "Welcome! Your Login Credentials";
 
-       }
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT) // 409 Conflict
-                .body("Client already exists. Credentials were not resent.");
+            boolean created = clientService.sendCredentials(id);
+            if (created) {
+                emailService.sendSimpleMail(new EmailModel(email, body, subject));
+                response.put("message", "Email sent to client with ID: " + id);
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("message", "Client already exists. Credentials were not resent.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
 
+        } catch (Exception e) {
+            response.put("error", "An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
+
 
 
 
