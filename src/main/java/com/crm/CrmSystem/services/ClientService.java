@@ -92,6 +92,10 @@ public boolean sendCredentials(int id) {
     return clientRepo.findById(id);
     }
 
+    public List<Client> getAllClients(){
+    return clientRepo.findAll();
+    }
+
 
 
 

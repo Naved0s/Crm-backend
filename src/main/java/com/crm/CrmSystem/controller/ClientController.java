@@ -84,4 +84,11 @@ public class ClientController {
 
      */
 
+
+    //get all clients
+    @GetMapping("/getAll")
+    public List<Client> getAllClients(){
+        return clientService.getAllClients();
+    }
+
 }

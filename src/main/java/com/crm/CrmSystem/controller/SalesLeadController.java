@@ -41,9 +41,9 @@ public class SalesLeadController {
     @GetMapping("/qualified")
     public List<SalesLead> getQualifiedSalesLeads() {
         return salesLeadService.getall().stream().filter(
-                salesLead ->
-                    salesLead.getDealStatus() == SalesLeadStatus.NEW_LEAD ||
-                            salesLead.getDealStatus() == SalesLeadStatus.PROPOSED
+                salesLead -> salesLead.getLead().getLeadsource().isActive() &
+                        ( salesLead.getDealStatus() == SalesLeadStatus.NEW_LEAD ||
+                            salesLead.getDealStatus() == SalesLeadStatus.PROPOSED)
 
         ).toList() ;
     }

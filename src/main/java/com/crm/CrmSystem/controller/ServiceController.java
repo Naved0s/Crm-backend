@@ -15,11 +15,13 @@ public class ServiceController {
     @Autowired
     ServiceRepository serviceRepository;
 
+    // add services for admin
     @PostMapping("/addservice")
     public CrmService addService(@RequestBody CrmService crmService){
         return serviceRepository.save(crmService);
     }
 
+    //list of all services for admin
     @GetMapping("/all")
     public List<CrmService> getall(){
         return serviceRepository.findAll();
