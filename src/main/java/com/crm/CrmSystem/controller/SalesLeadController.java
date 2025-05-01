@@ -112,13 +112,20 @@ public class SalesLeadController {
 
     @PostMapping("/sendCredentials/{id}")
     public ResponseEntity<String> sendCrdentials(@PathVariable int id ){
+
        SalesLead s1 = salesLeadService.findbyId(id).get();
        String email = s1.getLead().getLeadsource().getLeadEmail();
        String body = "Hi client your Logged in credentials are:"+email+"password : 123";
        String subject = " Welcome Your Login Credentials are Here";
-       emailService.sendSimpleMail(new EmailModel(email,body,subject));
-       clientService.sendCredentials(id);
-        return ResponseEntity.ok("Email Send to "+id);
+       if(  clientService.sendCredentials(id)){
+           emailService.sendSimpleMail(new EmailModel(email,body,subject));
+           return ResponseEntity.ok("Email Send to "+id);
+
+       }
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // 409 Conflict
+                .body("Client already exists. Credentials were not resent.");
+
     }
 
 
