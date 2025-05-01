@@ -74,7 +74,7 @@ public class SalesLeadController {
     @GetMapping("/getNego")
     public List<SalesLead> getNegotiations() {
         return salesLeadService.getall().stream().filter(
-                salesLead -> !salesLead.getDealStatus().equals(SalesLeadStatus.NEW_LEAD)
+                salesLead -> !salesLead.getDealStatus().equals(SalesLeadStatus.NEW_LEAD) & salesLead.getLead().getLeadsource().isActive()
         ).toList();        // Compare directly with the enum
                 //.collect(Collectors.toList());  // Use collect() if you're on Java 8 or earlier
     }
@@ -108,7 +108,7 @@ public class SalesLeadController {
     @GetMapping("/wins")
     public List<SalesLead> getDeals(){
         return salesLeadService.getall().stream().filter(
-                salesLead -> salesLead.getDealStatus().equals(SalesLeadStatus.WON)
+                salesLead -> salesLead.getDealStatus().equals(SalesLeadStatus.WON) & salesLead.getLead().getLeadsource().isActive()
         ).toList();
     }
 

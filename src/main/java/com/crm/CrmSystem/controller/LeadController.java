@@ -29,7 +29,9 @@ public class LeadController {
 
     @GetMapping("/leadsall")
     public List<Lead> get(){
-        return leadservice.get();
+        return leadservice.get().stream().filter(
+                lead -> lead.getLeadsource().isActive()
+        ).toList();
     }
 
 
