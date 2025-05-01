@@ -30,7 +30,7 @@ public class SalesLead {
   // private SalesLeadStatus leadStatus;
 
 
-    private String ProposedDate;
+    private String proposedDate;
 
     private double proposedValue;
 

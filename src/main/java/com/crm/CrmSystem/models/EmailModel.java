@@ -16,7 +16,7 @@ public class EmailModel {
     private String attachment;
     private double dealValue;
 
-    private String proposedTime;
+    private String proposedDate;
 
     public EmailModel(String email, String body,String subject) {
         this.recipient = email;

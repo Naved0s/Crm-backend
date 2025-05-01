@@ -15,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,26 +46,32 @@ public class SalesLeadController {
     }
 
     @PostMapping("/sendmail/{id}")
-    public String sendMail(@RequestBody EmailModel emailModel, @PathVariable int id) {
+    public ResponseEntity<Map<String, String>> sendMail(@RequestBody EmailModel emailModel, @PathVariable int id) {
         System.out.println(id);  // To check if the id is being captured correctly
 
         SalesLead l = salesLeadService.findbyId(id).get();  // Fetch SalesLead using the provided id
-        System.out.println(l.getLead().getLeadsource().getLeadName());  // Print lead name for debugging
+        System.out.println(l.getLead().getLeadsource().getLeadName());
+        try {
+            // Set the email recipient and other values
+            emailModel.setRecipient(l.getLead().getLeadsource().getLeadEmail());
+            System.out.println(l.getLead().getLeadsource().getLeadEmail());
+            l.setProposedValue(emailModel.getDealValue());
+            l.setDealStatus(SalesLeadStatus.PROPOSED);
+           l.setProposedDate(emailModel.getProposedDate());
+            salesLeadRepository.save(l);
 
-        // Set the email recipient and other values
-        emailModel.setRecipient(l.getLead().getLeadsource().getLeadEmail());
-        System.out.println(l.getLead().getLeadsource().getLeadEmail());
-        l.setProposedValue(emailModel.getDealValue());
-       l.setDealStatus(SalesLeadStatus.PROPOSED);
-        l.setProposedDate(emailModel.getProposedTime());
-        salesLeadRepository.save(l);
+            // Send the email
+            String status = emailService.sendSimpleMail(emailModel);
+            System.out.println(status);
+            //  System.out.println(l.getLeadStatus() + " " + l.getProposedValue());
 
-        // Send the email
-        String status = emailService.sendSimpleMail(emailModel);
-        System.out.println(status);
-      //  System.out.println(l.getLeadStatus() + " " + l.getProposedValue());
+            return ResponseEntity.ok(Collections.singletonMap("message", status));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "An error occurred while sending the email."));
+        }
 
-        return status;
+
     }
 
     @GetMapping("/getNego")
@@ -80,7 +83,7 @@ public class SalesLeadController {
     }
 
     @PutMapping("/updateNego/{id}")
-    public ResponseEntity<String> update(@RequestBody SalesLead salesLead, @PathVariable int id) {
+    public ResponseEntity<Map<String, String>> update(@RequestBody SalesLead salesLead, @PathVariable int id) {
         // Fetch the existing SalesLead from the database by id
         Optional<SalesLead> existingSalesLead = salesLeadService.findbyId(id);
 
@@ -99,9 +102,10 @@ public class SalesLeadController {
             // Call service to save the updated SalesLead
             salesLeadService.update(l1);
 
-            return ResponseEntity.ok("Sales Lead updated successfully!");
+            return ResponseEntity.ok(Collections.singletonMap("message", "Sales Lead updated successfully!"));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sales Lead not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("error", "Sales Lead not found!"));
         }
     }
 
@@ -112,7 +116,7 @@ public class SalesLeadController {
         ).toList();
     }
 
-    @PostMapping("/sendCredentials/{id}")
+        @PostMapping("/sendCredentials/{id}")
     public ResponseEntity<Map<String, String>> sendCredentials(@PathVariable int id) {
         Map<String, String> response = new HashMap<>();
         try {

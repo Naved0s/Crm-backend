@@ -1,8 +1,12 @@
 package com.crm.CrmSystem.controller;
 
 import com.crm.CrmSystem.models.Client;
+import com.crm.CrmSystem.models.Ticket;
+import com.crm.CrmSystem.models.enums.TicketStatus;
 import com.crm.CrmSystem.services.ClientService;
+import com.crm.CrmSystem.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +19,9 @@ public class ClientController {
 
     @Autowired
     ClientService clientService;
+
+    @Autowired
+    TicketService ticketService;
 
     @GetMapping("/myService/{id}")
     public Optional<Client> getClientServiceById(@PathVariable int id){
@@ -89,6 +96,15 @@ public class ClientController {
     @GetMapping("/getAll")
     public List<Client> getAllClients(){
         return clientService.getAllClients();
+    }
+
+
+    @PostMapping("/raiseTicket")
+    public ResponseEntity<String> raise(@RequestBody Ticket t){
+
+        t.setStatus(TicketStatus.OPEN);
+        ticketService.raiseTicket(t);
+        return ResponseEntity.ok().build();
     }
 
 }
